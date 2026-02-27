@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tune Up Tech — Fine Tuned for You</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=SF+Pro+Display:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #000000;
+            --bg-elevated: #0a0a0a;
+            --bg-card: #111111;
+            --bg-card-hover: #1a1a1a;
+            --accent: #2997ff;
+            --accent-hover: #0077ed;
+            --text: #f5f5f7;
+            --text-secondary: #86868b;
+            --text-muted: #6e6e73;
+            --border: #1d1d1f;
+            --border-light: #2d2d2f;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* ===== NAV ===== */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            height: 52px;
+            background: rgba(0,0,0,0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .nav-inner {
+            max-width: 1024px; width: 100%; padding: 0 22px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .nav-logo {
+            font-weight: 600; font-size: 1.05rem; color: var(--text);
+            letter-spacing: -0.01em;
+        }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links button {
+            background: none; border: none; color: var(--text-secondary);
+            font-family: var(--font); font-size: 0.75rem; font-weight: 400;
+            cursor: pointer; transition: color 0.2s; padding: 0;
+            letter-spacing: 0.01em;
+        }
+        .nav-links button:hover { color: var(--text); }
+        .nav-links button.active { color: var(--text); }
+        .nav-cta {
+            color: var(--accent) !important; font-weight: 500 !important;
+        }
+
+        .mobile-toggle {
+            display: none; background: none; border: none;
+            color: var(--text); font-size: 1.2rem; cursor: pointer;
+        }
+
+        /* ===== PAGE SYSTEM ===== */
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 100vh; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; padding: 7rem 2rem 4rem;
+            position: relative; overflow: hidden;
+        }
+        .hero::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 200px;
+            background: linear-gradient(to top, var(--bg), transparent);
+        }
+        .hero-glow {
+            position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%);
+            width: 600px; height: 600px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(41,151,255,0.08) 0%, transparent 70%);
+            filter: blur(60px); pointer-events: none;
+        }
+        .hero-overline {
+            font-size: 0.8rem; font-weight: 500; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 1.5rem;
+            position: relative; z-index: 1;
+        }
+        .hero h1 {
+            font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 700;
+            line-height: 1.05; letter-spacing: -0.03em;
+            max-width: 800px; margin-bottom: 1.5rem;
+            position: relative; z-index: 1;
+        }
+        .hero h1 .gradient {
+            background: linear-gradient(90deg, #2997ff, #a78bfa);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .hero-sub {
+            font-size: 1.3rem; font-weight: 300; color: var(--text-secondary);
+            max-width: 500px; line-height: 1.6; margin-bottom: 2.5rem;
+            position: relative; z-index: 1; letter-spacing: -0.01em;
+        }
+        .hero-actions {
+            display: flex; gap: 1.2rem; position: relative; z-index: 1;
+        }
+        .btn-blue {
+            background: var(--accent); color: #fff; border: none;
+            padding: 0.7rem 1.8rem; border-radius: 980px; font-size: 0.9rem;
+            font-weight: 500; cursor: pointer; font-family: var(--font);
+            transition: background 0.2s; letter-spacing: -0.01em;
+        }
+        .btn-blue:hover { background: var(--accent-hover); }
+        .btn-ghost {
+            background: none; color: var(--accent); border: none;
+            padding: 0.7rem 1.8rem; border-radius: 980px; font-size: 0.9rem;
+            font-weight: 500; cursor: pointer; font-family: var(--font);
+            transition: color 0.2s; letter-spacing: -0.01em;
+        }
+        .btn-ghost:hover { color: #5ab4ff; }
+
+        /* ===== STATS ===== */
+        .stats-strip {
+            display: flex; justify-content: center; gap: 4rem;
+            padding: 3rem 2rem; position: relative; z-index: 2;
+            border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+        }
+        .stat { text-align: center; }
+        .stat-val {
+            font-size: 2rem; font-weight: 700; letter-spacing: -0.03em;
+            background: linear-gradient(135deg, #fff, #86868b);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .stat-lbl { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.3rem; }
+
+        /* ===== SECTION LAYOUT ===== */
+        .section { max-width: 1024px; margin: 0 auto; padding: 6rem 2rem; }
+        .section-sm { max-width: 680px; margin: 0 auto; padding: 6rem 2rem; }
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-overline {
+            font-size: 0.7rem; font-weight: 500; color: var(--accent);
+            text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.8rem;
+        }
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700;
+            letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 1rem;
+        }
+        .section-desc {
+            font-size: 1.1rem; font-weight: 300; color: var(--text-secondary);
+            max-width: 500px; margin: 0 auto; line-height: 1.6; letter-spacing: -0.01em;
+        }
+        .divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+        /* ===== PAGE HERO ===== */
+        .page-hero {
+            padding: 8rem 2rem 3rem; text-align: center;
+        }
+        .page-hero h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 700;
+            letter-spacing: -0.03em; margin-bottom: 0.6rem;
+        }
+        .page-hero p { font-size: 1.1rem; color: var(--text-secondary); font-weight: 300; }
+
+        /* ===== PRODUCT CARDS (FOR SALE) ===== */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.2rem; }
+        .product-card {
+            background: var(--bg-card); border-radius: 20px;
+            overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: default;
+        }
+        .product-card:hover { transform: scale(1.015); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+        .product-img {
+            height: 260px; background: var(--bg-elevated);
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+        }
+        .product-img::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(180deg, transparent 60%, var(--bg-card));
+        }
+        .product-img .ph { font-size: 3rem; opacity: 0.08; }
+        .product-badge {
+            position: absolute; top: 16px; left: 16px; z-index: 2;
+            padding: 0.25rem 0.75rem; border-radius: 980px;
+            font-size: 0.65rem; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+        .product-badge.available { background: rgba(52,199,89,0.15); color: #34c759; }
+        .product-badge.sold { background: rgba(255,69,58,0.15); color: #ff453a; }
+        .product-body { padding: 1.6rem 1.8rem 1.8rem; }
+        .product-name { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+        .product-specs { font-size: 0.78rem; color: var(--accent); font-weight: 500; margin-bottom: 0.6rem; letter-spacing: 0.01em; }
+        .product-desc { font-size: 0.88rem; color: var(--text-secondary); font-weight: 300; line-height: 1.6; margin-bottom: 1.2rem; }
+        .product-foot { display: flex; justify-content: space-between; align-items: center; }
+        .product-price { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.03em; }
+        .product-cta {
+            background: none; border: none; color: var(--accent);
+            font-family: var(--font); font-size: 0.85rem; font-weight: 500;
+            cursor: pointer; padding: 0.5rem 0; transition: color 0.2s;
+        }
+        .product-cta::after { content: ' →'; }
+        .product-cta:hover { color: #5ab4ff; }
+
+        /* ===== CTA BANNER ===== */
+        .cta-banner {
+            text-align: center; padding: 5rem 2rem;
+            background: var(--bg-elevated);
+            border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+        }
+        .cta-banner h2 {
+            font-size: clamp(1.8rem, 3.5vw, 2.5rem); font-weight: 700;
+            letter-spacing: -0.03em; margin-bottom: 0.6rem;
+        }
+        .cta-banner p {
+            font-size: 1rem; color: var(--text-secondary); font-weight: 300;
+            max-width: 420px; margin: 0 auto 2rem; line-height: 1.6;
+        }
+
+        /* ===== GALLERY ===== */
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+        .gallery-card {
+            background: var(--bg-card); border-radius: 16px; overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        .gallery-card:hover { transform: scale(1.02); }
+        .gallery-img {
+            height: 200px; background: var(--bg-elevated);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .gallery-img .ph { font-size: 2.5rem; opacity: 0.08; }
+        .gallery-body { padding: 1.2rem 1.4rem 1.4rem; }
+        .gallery-name { font-size: 1rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 0.2rem; }
+        .gallery-specs { font-size: 0.72rem; color: var(--accent); font-weight: 500; margin-bottom: 0.4rem; }
+        .gallery-desc { font-size: 0.82rem; color: var(--text-secondary); font-weight: 300; line-height: 1.5; }
+
+        /* ===== SERVICE CARDS ===== */
+        .service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+        .svc-card {
+            background: var(--bg-card); border-radius: 16px; padding: 2rem;
+            transition: background 0.2s;
+        }
+        .svc-card:hover { background: var(--bg-card-hover); }
+        .svc-icon { font-size: 1.6rem; margin-bottom: 1rem; }
+        .svc-card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.4rem; letter-spacing: -0.02em; }
+        .svc-card p { font-size: 0.88rem; color: var(--text-secondary); font-weight: 300; line-height: 1.6; }
+        .svc-price {
+            display: inline-block; margin-top: 0.8rem; font-size: 0.75rem;
+            color: var(--accent); font-weight: 600;
+        }
+
+        /* ===== PRICING TABLE ===== */
+        .price-table { width: 100%; border-collapse: collapse; }
+        .price-table th {
+            text-align: left; font-size: 0.65rem; font-weight: 600;
+            color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em;
+            padding: 0.8rem 0; border-bottom: 1px solid var(--border);
+        }
+        .price-table td {
+            padding: 1rem 0; border-bottom: 1px solid var(--border);
+            font-size: 0.92rem; color: var(--text-secondary); font-weight: 300;
+        }
+        .price-table tr:hover td { color: var(--text); }
+        .price-table .pv { color: var(--text); font-weight: 600; }
+        .price-table .pn { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem; font-weight: 300; }
+        .price-note {
+            margin-top: 2rem; padding: 1.2rem 1.5rem; background: var(--bg-card);
+            border-radius: 12px; font-size: 0.88rem; color: var(--text-secondary); font-weight: 300;
+            text-align: center; line-height: 1.6;
+        }
+        .price-note strong { color: var(--text); font-weight: 600; }
+
+        /* ===== ABOUT ===== */
+        .about-text { text-align: center; max-width: 620px; margin: 0 auto; }
+        .about-text p { font-size: 1.05rem; color: var(--text-secondary); font-weight: 300; line-height: 1.8; margin-bottom: 1.2rem; }
+        .about-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-top: 1.5rem; }
+        .about-tags span {
+            padding: 0.4rem 1rem; border-radius: 980px; font-size: 0.78rem;
+            color: var(--text-secondary); background: var(--bg-card); font-weight: 400;
+        }
+
+        /* ===== PROCESS ===== */
+        .process-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2.5rem; }
+        .proc-step { text-align: center; }
+        .proc-num {
+            font-size: 2.5rem; font-weight: 700; letter-spacing: -0.05em;
+            color: var(--border-light); margin-bottom: 0.8rem;
+        }
+        .proc-step h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.4rem; letter-spacing: -0.01em; }
+        .proc-step p { font-size: 0.88rem; color: var(--text-secondary); font-weight: 300; line-height: 1.6; }
+
+        /* ===== AREA ===== */
+        .area-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; max-width: 600px; margin: 0 auto; }
+        .area-card {
+            background: var(--bg-card); border-radius: 16px; padding: 2rem; text-align: center;
+        }
+        .area-card .area-icon { font-size: 1.8rem; margin-bottom: 0.8rem; }
+        .area-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.3rem; }
+        .area-card p { font-size: 0.85rem; color: var(--text-secondary); font-weight: 300; line-height: 1.6; }
+
+        /* ===== FAQ ===== */
+        .faq-list { max-width: 640px; margin: 0 auto; }
+        .faq-item { border-bottom: 1px solid var(--border); }
+        .faq-q {
+            width: 100%; background: none; border: none; color: var(--text);
+            font-family: var(--font); font-size: 0.95rem; font-weight: 500;
+            padding: 1.2rem 0; text-align: left; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: color 0.2s; letter-spacing: -0.01em;
+        }
+        .faq-q:hover { color: var(--accent); }
+        .faq-q .arrow { font-size: 1rem; color: var(--text-muted); transition: transform 0.3s; }
+        .faq-item.open .arrow { transform: rotate(45deg); color: var(--accent); }
+        .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .faq-item.open .faq-a { max-height: 300px; }
+        .faq-a p { padding-bottom: 1.2rem; font-size: 0.88rem; color: var(--text-secondary); font-weight: 300; line-height: 1.7; }
+
+        /* ===== CONTACT ===== */
+        .contact-layout { display: grid; grid-template-columns: 1fr 1.3fr; gap: 4rem; max-width: 800px; margin: 0 auto; }
+        .contact-info h3 { font-size: 0.7rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.6rem; margin-top: 1.8rem; }
+        .contact-info h3:first-child { margin-top: 0; }
+        .contact-info p { font-size: 0.92rem; color: var(--text-secondary); font-weight: 300; line-height: 1.7; }
+        .contact-info a { color: var(--accent); text-decoration: none; }
+        .contact-info a:hover { text-decoration: underline; }
+        .social-row { display: flex; gap: 0.6rem; margin-top: 0.8rem; }
+        .soc-btn {
+            width: 40px; height: 40px; background: var(--bg-card); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none; color: var(--text-secondary); font-size: 0.95rem;
+            transition: background 0.2s, color 0.2s;
+        }
+        .soc-btn:hover { background: var(--bg-card-hover); color: var(--text); }
+
+        .c-form { display: flex; flex-direction: column; gap: 1rem; }
+        .c-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .c-form label { display: block; font-size: 0.7rem; font-weight: 500; color: var(--text-muted); margin-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 0.06em; }
+        .c-form input, .c-form textarea, .c-form select {
+            width: 100%; background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 10px; padding: 0.8rem 1rem; color: var(--text);
+            font-family: var(--font); font-size: 0.88rem; outline: none;
+            transition: border-color 0.2s;
+        }
+        .c-form input:focus, .c-form textarea:focus, .c-form select:focus { border-color: var(--accent); }
+        .c-form textarea { resize: vertical; min-height: 100px; }
+        .c-form select option { background: var(--bg-card); }
+        .c-form .form-submit { align-self: flex-start; margin-top: 0.5rem; }
+
+        /* ===== LEGAL ===== */
+        .legal { max-width: 640px; margin: 0 auto; padding: 2rem 2rem 6rem; }
+        .legal h2 { font-size: 1.15rem; font-weight: 600; margin-top: 2.5rem; margin-bottom: 0.6rem; letter-spacing: -0.02em; }
+        .legal h2:first-child { margin-top: 0; }
+        .legal p { font-size: 0.92rem; color: var(--text-secondary); font-weight: 300; line-height: 1.8; margin-bottom: 0.8rem; }
+        .legal ul { color: var(--text-secondary); font-size: 0.92rem; font-weight: 300; line-height: 1.8; padding-left: 1.3rem; margin-bottom: 0.8rem; }
+        .legal a { color: var(--accent); text-decoration: none; }
+        .legal-date { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 2rem; }
+
+        /* ===== BUILD FORM ===== */
+        .build-form { max-width: 640px; margin: 0 auto; }
+        .build-form .fg { margin-bottom: 1.4rem; }
+        .build-form label { display: block; font-size: 0.7rem; font-weight: 500; color: var(--text-muted); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.06em; }
+        .build-form input[type="text"], .build-form input[type="email"], .build-form textarea {
+            width: 100%; background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 10px; padding: 0.8rem 1rem; color: var(--text);
+            font-family: var(--font); font-size: 0.88rem; outline: none;
+            transition: border-color 0.2s;
+        }
+        .build-form input:focus, .build-form textarea:focus { border-color: var(--accent); }
+        .build-form textarea { resize: vertical; min-height: 100px; }
+        .build-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.4rem; }
+        .build-form .form-row .fg { margin-bottom: 0; }
+
+        .chip-group { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.3rem; }
+        .chip-group input { position: absolute; opacity: 0; width: 0; height: 0; }
+        .chip-group label {
+            padding: 0.5rem 1.1rem; background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 980px; font-size: 0.8rem; color: var(--text-secondary);
+            cursor: pointer; transition: all 0.2s; font-weight: 400; user-select: none;
+        }
+        .chip-group label:hover { border-color: var(--border-light); color: var(--text); }
+        .chip-group input:checked + label { background: rgba(41,151,255,0.12); border-color: var(--accent); color: var(--accent); font-weight: 500; }
+
+        .budget-row { display: flex; align-items: center; gap: 1rem; margin-top: 0.4rem; }
+        .budget-row input[type="range"] {
+            flex: 1; -webkit-appearance: none; appearance: none; height: 4px;
+            background: var(--border); border-radius: 2px; outline: none;
+        }
+        .budget-row input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 18px; height: 18px;
+            background: var(--accent); border-radius: 50%; cursor: pointer; border: none;
+        }
+        .budget-row .bv {
+            font-size: 1.2rem; font-weight: 700; color: var(--text);
+            min-width: 70px; text-align: right; letter-spacing: -0.02em;
+        }
+
+        /* ===== COOKIE ===== */
+        .cookie-bar {
+            position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+            background: var(--bg-elevated); border-top: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex; align-items: center; justify-content: center; gap: 2rem;
+            flex-wrap: wrap;
+            transform: translateY(100%); transition: transform 0.4s ease;
+        }
+        .cookie-bar.visible { transform: translateY(0); }
+        .cookie-bar p { font-size: 0.82rem; color: var(--text-secondary); font-weight: 300; max-width: 500px; }
+        .cookie-bar a { color: var(--accent); text-decoration: none; }
+        .cookie-btns { display: flex; gap: 0.6rem; }
+        .cookie-btns button {
+            padding: 0.45rem 1rem; border-radius: 980px; font-family: var(--font);
+            font-size: 0.75rem; font-weight: 500; cursor: pointer; transition: all 0.2s;
+        }
+        .ck-accept { background: var(--accent); color: #fff; border: none; }
+        .ck-accept:hover { background: var(--accent-hover); }
+        .ck-decline { background: none; color: var(--text-secondary); border: 1px solid var(--border); }
+        .ck-decline:hover { color: var(--text); border-color: var(--border-light); }
+
+        /* ===== FOOTER ===== */
+        footer {
+            max-width: 1024px; margin: 0 auto; padding: 2rem 2rem;
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem;
+            border-top: 1px solid var(--border);
+        }
+        .foot-left { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+        .foot-brand { font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); }
+        .foot-links { display: flex; gap: 1.5rem; list-style: none; }
+        .foot-links button {
+            background: none; border: none; color: var(--text-muted);
+            font-family: var(--font); font-size: 0.75rem; cursor: pointer;
+            transition: color 0.2s; padding: 0;
+        }
+        .foot-links button:hover { color: var(--text); }
+        .foot-copy { font-size: 0.7rem; color: var(--text-muted); }
+
+        /* ===== ANIMATIONS ===== */
+        .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
+
+        /* ===== MOBILE ===== */
+        @media (max-width: 768px) {
+            .nav-links { display: none; position: absolute; top: 52px; left: 0; right: 0; background: rgba(0,0,0,0.96); flex-direction: column; padding: 1.5rem 2rem; gap: 1rem; border-bottom: 1px solid var(--border); }
+            .nav-links.open { display: flex; }
+            .mobile-toggle { display: block; }
+            .hero { min-height: auto; padding: 7rem 1.5rem 3rem; }
+            .stats-strip { gap: 2rem; flex-wrap: wrap; }
+            .section, .section-sm { padding: 4rem 1.5rem; }
+            .contact-layout { grid-template-columns: 1fr; gap: 2rem; }
+            .c-form .form-row { grid-template-columns: 1fr; }
+            .area-row { grid-template-columns: 1fr; }
+            .product-grid { grid-template-columns: 1fr; }
+            .cookie-bar { flex-direction: column; text-align: center; gap: 0.8rem; }
+            .build-form .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+    <div class="nav-inner">
+        <span class="nav-logo">Tune Up Tech</span>
+        <button class="mobile-toggle" id="mt" aria-label="Open menu" aria-expanded="false">☰</button>
+        <ul class="nav-links" id="nl">
+            <li><button data-page="home" class="active">Home</button></li>
+            <li><button data-page="services">Services</button></li>
+            <li><button data-page="about">About</button></li>
+            <li><button data-page="faq">FAQ</button></li>
+            <li><button data-page="build-request">Request a Build</button></li>
+            <li><button data-page="contact" class="nav-cta">Contact</button></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- ===== HOME ===== -->
+<main class="page active" id="page-home">
+
+    <section class="hero">
+        <div class="hero-glow"></div>
+        <div class="hero-overline">Custom Builds &bull; Repairs &bull; Upgrades</div>
+        <h1>Fine Tuned<br><span class="gradient">for You.</span></h1>
+        <p class="hero-sub">Expert PC builds and repairs with transparent pricing. Serving Kearney, NE and shipping nationwide.</p>
+        <div class="hero-actions">
+            <button class="btn-blue" data-page="contact">Get a Quote</button>
+            <button class="btn-ghost" data-page="services">Learn More</button>
+        </div>
+    </section>
+
+    <div class="stats-strip">
+        <div class="stat"><div class="stat-val">36+</div><div class="stat-lbl">Builds</div></div>
+        <div class="stat"><div class="stat-val">Free</div><div class="stat-lbl">Consultations</div></div>
+        <div class="stat"><div class="stat-val">30 Day</div><div class="stat-lbl">Warranty</div></div>
+        <div class="stat"><div class="stat-val">US</div><div class="stat-lbl">Nationwide</div></div>
+    </div>
+
+    <div class="section">
+        <div class="section-header reveal">
+            <div class="section-overline">Shop</div>
+            <h2 class="section-title">PCs for Sale</h2>
+            <p class="section-desc">Ready-to-go machines. Built, tested, and available now.</p>
+        </div>
+        <div class="product-grid">
+            <div class="product-card reveal">
+                <div class="product-img"><span class="product-badge available">Available</span><span class="ph">📸</span></div>
+                <div class="product-body">
+                    <div class="product-name">Starter Gaming PC</div>
+                    <div class="product-specs">Ryzen 5 5600 · RX 7600 · 16GB DDR4 · 1TB NVMe</div>
+                    <div class="product-desc">Great entry-level 1080p gaming rig. Clean build, quiet operation.</div>
+                    <div class="product-foot"><span class="product-price">$650</span><button class="product-cta" data-page="contact">Inquire</button></div>
+                </div>
+            </div>
+            <div class="product-card reveal">
+                <div class="product-img"><span class="product-badge available">Available</span><span class="ph">📸</span></div>
+                <div class="product-body">
+                    <div class="product-name">Mid-Range Powerhouse</div>
+                    <div class="product-specs">Ryzen 7 7700X · RTX 4070 · 32GB DDR5 · 1TB NVMe</div>
+                    <div class="product-desc">Solid 1440p gaming and content creation. Excellent thermals.</div>
+                    <div class="product-foot"><span class="product-price">$1,150</span><button class="product-cta" data-page="contact">Inquire</button></div>
+                </div>
+            </div>
+            <div class="product-card reveal">
+                <div class="product-img"><span class="product-badge sold">Sold</span><span class="ph">📸</span></div>
+                <div class="product-body">
+                    <div class="product-name">Compact Workstation</div>
+                    <div class="product-specs">Intel i5-13400 · 16GB DDR5 · 512GB NVMe</div>
+                    <div class="product-desc">Small form factor office machine. Quiet and efficient.</div>
+                    <div class="product-foot"><span class="product-price">$425</span><span style="font-size:0.82rem;color:var(--text-muted)">Sold</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="cta-banner reveal">
+        <h2>Something custom in mind?</h2>
+        <p>Tell us your budget and what you need — we'll build it.</p>
+        <button class="btn-blue" data-page="build-request">Request a Build</button>
+    </div>
+
+    <div class="section">
+        <div class="section-header reveal">
+            <div class="section-overline">Portfolio</div>
+            <h2 class="section-title">Past Builds</h2>
+            <p class="section-desc">Some of the machines we've put together.</p>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-card reveal"><div class="gallery-img"><span class="ph">📸</span></div><div class="gallery-body"><div class="gallery-name">The Midnight Build</div><div class="gallery-specs">Ryzen 7 7800X3D · RTX 4070 Ti · 32GB DDR5</div><div class="gallery-desc">High-performance 1440p ultra. Clean black-and-white aesthetic.</div></div></div>
+            <div class="gallery-card reveal"><div class="gallery-img"><span class="ph">📸</span></div><div class="gallery-body"><div class="gallery-name">Budget Workhorse</div><div class="gallery-specs">Ryzen 5 5600 · RX 7600 · 16GB DDR4</div><div class="gallery-desc">Affordable all-rounder for gaming and schoolwork.</div></div></div>
+            <div class="gallery-card reveal"><div class="gallery-img"><span class="ph">📸</span></div><div class="gallery-body"><div class="gallery-name">Content Creator Station</div><div class="gallery-specs">Ryzen 9 7950X · RTX 4080 · 64GB DDR5</div><div class="gallery-desc">Powerhouse for video editing and 3D rendering.</div></div></div>
+            <div class="gallery-card reveal"><div class="gallery-img"><span class="ph">📸</span></div><div class="gallery-body"><div class="gallery-name">The First Timer</div><div class="gallery-specs">Intel i5-13400F · RTX 4060 · 16GB DDR5</div><div class="gallery-desc">A client's first gaming PC. Guided through every choice.</div></div></div>
+            <div class="gallery-card reveal"><div class="gallery-img"><span class="ph">📸</span></div><div class="gallery-body"><div class="gallery-name">Mini ITX Sleeper</div><div class="gallery-specs">Ryzen 7 5700X · RTX 3070 · 32GB DDR4</div><div class="gallery-desc">Compact SFF build that punches above its size.</div></div></div>
+            <div class="gallery-card reveal"><div class="gallery-img"><span class="ph">📸</span></div><div class="gallery-body"><div class="gallery-name">Office Refresh</div><div class="gallery-specs">Intel i3-13100 · Integrated · 8GB DDR4</div><div class="gallery-desc">Clean, quiet workstations for a small business.</div></div></div>
+        </div>
+    </div>
+
+</main>
+
+<!-- ===== SERVICES ===== -->
+<div class="page" id="page-services">
+    <div class="page-hero"><h1>Services & Pricing</h1><p>Everything we offer. No surprises.</p></div>
+
+    <div class="section">
+        <div class="section-header reveal"><div class="section-overline">What We Do</div><h2 class="section-title">Services</h2></div>
+        <div class="service-grid">
+            <div class="svc-card reveal"><div class="svc-icon">🖥️</div><h3>Custom PC Assembly</h3><p>Hand-picked components, expert assembly, clean cable management, thorough testing.</p><span class="svc-price">$100 – $150 labor</span></div>
+            <div class="svc-card reveal"><div class="svc-icon">🔍</div><h3>Diagnostics</h3><p>Full hardware and software diagnostic to find exactly what's wrong.</p><span class="svc-price">$25 — waived with repair</span></div>
+            <div class="svc-card reveal"><div class="svc-icon">🛠️</div><h3>Computer Repair</h3><p>Hardware failures, boot issues, crashes, component replacements.</p><span class="svc-price">$40/hr</span></div>
+            <div class="svc-card reveal"><div class="svc-icon">🚀</div><h3>Upgrades</h3><p>RAM, SSD, GPU installations, and more. New life for your machine.</p><span class="svc-price">$40/hr</span></div>
+            <div class="svc-card reveal"><div class="svc-icon">✨</div><h3>Cleaning & Thermal Paste</h3><p>Deep dust removal, fresh thermal compound. Lower temps, longer life.</p><span class="svc-price">CPU $30 · GPU $40–$75</span></div>
+            <div class="svc-card reveal"><div class="svc-icon">⚡</div><h3>Tuning & Overclocking</h3><p>Safe, stable overclocks and system optimization.</p><span class="svc-price">Contact for quote</span></div>
+            <div class="svc-card reveal"><div class="svc-icon">💿</div><h3>OS Installation</h3><p>Fresh Windows install, drivers, updates, and configuration.</p><span class="svc-price">Included</span></div>
+            <div class="svc-card reveal"><div class="svc-icon">💾</div><h3>Data Migration</h3><p>Transfer files, apps, and settings to a new drive or machine.</p><span class="svc-price">$40 – $80</span></div>
+            <div class="svc-card reveal"><div class="svc-icon">💬</div><h3>Consultations</h3><p>Not sure what you need? Let's talk it through.</p><span class="svc-price">Free · 15–30 min</span></div>
+            <div class="svc-card reveal"><div class="svc-icon">♻️</div><h3>Trade-Ins</h3><p>Old hardware collecting dust? We'll take it off your hands.</p><span class="svc-price">Contact for details</span></div>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section-sm">
+        <div class="section-header reveal"><div class="section-overline">Pricing</div><h2 class="section-title">Rate Sheet</h2></div>
+        <table class="price-table reveal">
+            <thead><tr><th>Service</th><th>Price</th></tr></thead>
+            <tbody>
+                <tr><td>Diagnostics</td><td><span class="pv">$25</span><span class="pn">Waived with repair</span></td></tr>
+                <tr><td>General Repair</td><td><span class="pv">$40/hr</span></td></tr>
+                <tr><td>Custom Build (labor)</td><td><span class="pv">$100 – $150</span><span class="pn">Parts separate</span></td></tr>
+                <tr><td>Upgrades</td><td><span class="pv">$40/hr</span><span class="pn">Plus parts</span></td></tr>
+                <tr><td>Thermal Paste — CPU</td><td><span class="pv">$30</span></td></tr>
+                <tr><td>Thermal Paste — GPU</td><td><span class="pv">$40 – $75</span></td></tr>
+                <tr><td>Cleaning</td><td><span class="pv">$40/hr</span></td></tr>
+                <tr><td>Data Migration</td><td><span class="pv">$40 – $80</span></td></tr>
+                <tr><td>OS Installation</td><td><span class="pv">Included</span></td></tr>
+                <tr><td>Tuning & OC</td><td><span class="pv">Quote</span></td></tr>
+                <tr><td>Consultation</td><td><span class="pv">Free</span><span class="pn">15–30 min</span></td></tr>
+            </tbody>
+        </table>
+        <div class="price-note reveal"><strong>30-day warranty</strong> on all parts. All prices are labor — hardware quoted separately. No work without approval.</div>
+    </div>
+</div>
+
+<!-- ===== ABOUT ===== -->
+<div class="page" id="page-about">
+    <div class="page-hero"><h1>About</h1><p>Who we are, how we work, and where we serve.</p></div>
+
+    <div class="section">
+        <div class="section-header reveal"><div class="section-overline">About</div><h2 class="section-title">Who We Are</h2></div>
+        <div class="about-text reveal">
+            <p>Tune Up Tech is a computer repair and custom PC building service based in Kearney, Nebraska. We specialize in building high-performance machines tailored to our clients' needs — along with reliable repair, upgrade, and diagnostic services.</p>
+            <p>With over 36 completed builds and hands-on experience across a wide range of hardware, we bring a technical foundation backed by formal IT and Networking education and professional repair work.</p>
+            <p>We understand what our clients need because we're users ourselves — gamers, creators, and professionals who depend on hardware that performs.</p>
+            <div class="about-tags"><span>36+ Builds</span><span>IT & Networking</span><span>Repair Experience</span><span>Kearney, NE</span><span>Nationwide</span></div>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section">
+        <div class="section-header reveal"><div class="section-overline">Process</div><h2 class="section-title">How It Works</h2></div>
+        <div class="process-row">
+            <div class="proc-step reveal"><div class="proc-num">01</div><h3>Reach Out</h3><p>Send a message through the contact form or email.</p></div>
+            <div class="proc-step reveal"><div class="proc-num">02</div><h3>Consultation</h3><p>We'll chat through options and give you an honest quote.</p></div>
+            <div class="proc-step reveal"><div class="proc-num">03</div><h3>We Build</h3><p>Once approved, your machine gets built or repaired with care.</p></div>
+            <div class="proc-step reveal"><div class="proc-num">04</div><h3>Deliver</h3><p>Pick up locally or we ship it to your door.</p></div>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section">
+        <div class="section-header reveal"><div class="section-overline">Coverage</div><h2 class="section-title">Service Area</h2></div>
+        <div class="area-row reveal">
+            <div class="area-card"><div class="area-icon">📍</div><h3>Local</h3><p>Pickup and delivery within 30 min of Kearney, NE.</p></div>
+            <div class="area-card"><div class="area-icon">📦</div><h3>Nationwide</h3><p>Ship your PC to us or have a build shipped to your door.</p></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== FAQ ===== -->
+<div class="page" id="page-faq">
+    <div class="page-hero"><h1>FAQ</h1><p>Quick answers to common questions.</p></div>
+    <div class="section-sm">
+        <div class="faq-list">
+            <div class="faq-item reveal"><button class="faq-q" aria-expanded="false">How long does a typical repair take?<span class="arrow">+</span></button><div class="faq-a"><p>Most software repairs are same-day. Hardware takes 24–48 hours. Custom builds take 3–5 business days from parts arrival.</p></div></div>
+            <div class="faq-item reveal"><button class="faq-q" aria-expanded="false">Is the diagnostic fee really waived?<span class="arrow">+</span></button><div class="faq-a"><p>Yes — proceed with the repair and the $25 fee is waived. Otherwise you only pay the diagnostic.</p></div></div>
+            <div class="faq-item reveal"><button class="faq-q" aria-expanded="false">Can I supply my own parts?<span class="arrow">+</span></button><div class="faq-a"><p>Absolutely. Bring your own parts and we'll assemble for the build fee. We can also help pick compatible parts.</p></div></div>
+            <div class="faq-item reveal"><button class="faq-q" aria-expanded="false">What does the warranty cover?<span class="arrow">+</span></button><div class="faq-a"><p>30-day warranty on all parts. If a component we installed fails, we replace it at no cost.</p></div></div>
+            <div class="faq-item reveal"><button class="faq-q" aria-expanded="false">How does shipping work?<span class="arrow">+</span></button><div class="faq-a"><p>Ship-in repairs: send your PC, we fix and ship back. Builds: shipped to your door. Costs quoted separately.</p></div></div>
+            <div class="faq-item reveal"><button class="faq-q" aria-expanded="false">What if you can't fix it?<span class="arrow">+</span></button><div class="faq-a"><p>You don't pay for the repair — only for parts ordered at your request.</p></div></div>
+            <div class="faq-item reveal"><button class="faq-q" aria-expanded="false">Do you work on laptops?<span class="arrow">+</span></button><div class="faq-a"><p>Our focus is desktops, but some laptop upgrades (RAM, SSD) are within scope. Reach out to discuss.</p></div></div>
+            <div class="faq-item reveal"><button class="faq-q" aria-expanded="false">How do trade-ins work?<span class="arrow">+</span></button><div class="faq-a"><p>Bring in old hardware — we'll assess it and apply as credit toward a service or build.</p></div></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== REQUEST A BUILD ===== -->
+<div class="page" id="page-build-request">
+    <div class="page-hero"><h1>Request a Build</h1><p>Tell us what you need. We'll put it together.</p></div>
+    <div class="section-sm">
+        <form class="build-form reveal" id="buildForm">
+            <div class="form-row">
+                <div class="fg"><label for="bn">Name</label><input type="text" id="bn" placeholder="Your name" required></div>
+                <div class="fg"><label for="be">Email</label><input type="email" id="be" placeholder="you@email.com" required></div>
+            </div>
+            <div class="fg">
+                <label>Primary Use</label>
+                <div class="chip-group">
+                    <span><input type="radio" name="use" id="ug" value="gaming"><label for="ug">Gaming</label></span>
+                    <span><input type="radio" name="use" id="uw" value="work"><label for="uw">Work</label></span>
+                    <span><input type="radio" name="use" id="uc" value="content"><label for="uc">Content Creation</label></span>
+                    <span><input type="radio" name="use" id="us" value="streaming"><label for="us">Streaming</label></span>
+                    <span><input type="radio" name="use" id="usc" value="school"><label for="usc">School</label></span>
+                    <span><input type="radio" name="use" id="ua" value="all"><label for="ua">All-Rounder</label></span>
+                </div>
+            </div>
+            <div class="fg">
+                <label for="bb">Budget</label>
+                <div class="budget-row">
+                    <input type="range" id="bb" min="400" max="3000" step="50" value="1000">
+                    <span class="bv" id="bval">$1,000</span>
+                </div>
+            </div>
+            <div class="fg">
+                <label>Performance Target</label>
+                <div class="chip-group">
+                    <span><input type="radio" name="perf" id="p1" value="1080"><label for="p1">1080p</label></span>
+                    <span><input type="radio" name="perf" id="p2" value="1440"><label for="p2">1440p</label></span>
+                    <span><input type="radio" name="perf" id="p3" value="4k"><label for="p3">4K</label></span>
+                    <span><input type="radio" name="perf" id="p4" value="na"><label for="p4">N/A</label></span>
+                </div>
+            </div>
+            <div class="fg">
+                <label>Preferences</label>
+                <div class="chip-group">
+                    <span><input type="checkbox" id="cq" value="quiet"><label for="cq">Quiet</label></span>
+                    <span><input type="checkbox" id="cr" value="rgb"><label for="cr">RGB</label></span>
+                    <span><input type="checkbox" id="cm" value="minimal"><label for="cm">Minimal</label></span>
+                    <span><input type="checkbox" id="cs" value="sff"><label for="cs">Small Form Factor</label></span>
+                    <span><input type="checkbox" id="cw" value="wifi"><label for="cw">WiFi</label></span>
+                    <span><input type="checkbox" id="cf" value="future"><label for="cf">Upgradability</label></span>
+                </div>
+            </div>
+            <div class="fg"><label for="bm">Must-have components (optional)</label><input type="text" id="bm" placeholder="e.g. RTX 4070, AMD only, 32GB RAM..."></div>
+            <div class="fg"><label for="bno">Anything else?</label><textarea id="bno" placeholder="Games, software, timeline, shipping preference..."></textarea></div>
+            <div style="margin-top:0.5rem;"><button type="submit" class="btn-blue">Submit Request</button></div>
+        </form>
+    </div>
+</div>
+
+<!-- ===== CONTACT ===== -->
+<div class="page" id="page-contact">
+    <div class="page-hero"><h1>Contact</h1><p>Drop us a message. We'll get back to you soon.</p></div>
+    <div class="section">
+        <div class="contact-layout">
+            <div class="contact-info reveal">
+                <h3>Email</h3><p><a href="mailto:hello@tuneuptech.com">hello@tuneuptech.com</a></p>
+                <h3>Availability</h3><p>Reach out anytime — we respond as quickly as we can.</p>
+                <h3>Location</h3><p>Kearney, Nebraska<br>Local delivery · Nationwide shipping</p>
+                <h3>Social</h3>
+                <div class="social-row">
+                    <a href="#" class="soc-btn" aria-label="YouTube">▶</a>
+                    <a href="#" class="soc-btn" aria-label="Instagram">📷</a>
+                    <a href="#" class="soc-btn" aria-label="Facebook">f</a>
+                </div>
+            </div>
+            <form class="c-form reveal" id="contactForm">
+                <div class="form-row">
+                    <div><label for="cn">Name</label><input type="text" id="cn" placeholder="Your name" required></div>
+                    <div><label for="ce">Email</label><input type="email" id="ce" placeholder="you@email.com" required></div>
+                </div>
+                <div><label for="cs">Service</label>
+                    <select id="cs"><option value="">Select a service...</option><option>Buy a PC</option><option>Custom Build</option><option>Diagnostics</option><option>Repair</option><option>Upgrade</option><option>Cleaning</option><option>Tuning</option><option>Data Migration</option><option>Consultation</option><option>Trade-In</option><option>Other</option></select>
+                </div>
+                <div><label for="cmsg">Message</label><textarea id="cmsg" placeholder="Tell us what's going on..."></textarea></div>
+                <div class="form-submit"><button type="submit" class="btn-blue">Send Message</button></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ===== PRIVACY ===== -->
+<div class="page" id="page-privacy">
+    <div class="page-hero"><h1>Privacy Policy</h1><p>How we handle your information.</p></div>
+    <div class="legal">
+        <p class="legal-date">Last updated: February 2026</p>
+        <h2>Overview</h2><p>Tune Up Tech operates tuneuptech.com. This policy explains how we collect, use, and protect your information.</p>
+        <h2>Information We Collect</h2><p>We collect information you voluntarily provide: name, email, service inquiry details, and message content.</p>
+        <h2>How We Use It</h2><p>Solely to respond to inquiries, provide quotes, and communicate about your service. We never sell your data.</p>
+        <h2>Third Parties</h2><p>Our contact form may use a service like Formspree to deliver messages. Google Fonts may log IP addresses per Google's privacy policy.</p>
+        <h2>Cookies</h2><p>We use one cookie to remember your consent preference. No tracking or advertising cookies.</p>
+        <h2>Your Rights</h2><p>You can request a copy of your data, request deletion, or withdraw consent at any time. GDPR and CCPA rights apply where relevant. We do not sell personal information.</p>
+        <h2>Data Retention</h2><p>Contact info is retained only as long as needed for service and warranty (typically 90 days).</p>
+        <h2>Security</h2><p>The site is served over HTTPS. We take reasonable measures to protect your data.</p>
+        <h2>Contact</h2><p>Questions? Email <a href="mailto:hello@tuneuptech.com">hello@tuneuptech.com</a>.</p>
+    </div>
+</div>
+
+<!-- ===== TERMS ===== -->
+<div class="page" id="page-terms">
+    <div class="page-hero"><h1>Terms of Service</h1><p>Terms governing our services.</p></div>
+    <div class="legal">
+        <p class="legal-date">Last updated: February 2026</p>
+        <h2>Agreement</h2><p>By using Tune Up Tech's website and services, you agree to these terms.</p>
+        <h2>Services</h2><p>We provide computer repair, custom builds, upgrades, diagnostics, and related services from Kearney, Nebraska.</p>
+        <h2>Pricing</h2><p>All listed prices are labor. Parts quoted separately. No work without your approval.</p>
+        <h2>Warranty</h2><p>30-day warranty on parts we install. Does not cover physical damage, power surges, or customer-caused issues.</p>
+        <h2>PC Sales</h2><p>Pre-built PCs are sold as-is with our 30-day parts warranty. All sales final.</p>
+        <h2>Shipping</h2><p>We are not liable for shipping damage. Insurance recommended for high-value builds.</p>
+        <h2>Liability</h2><p>Our total liability is limited to the amount paid for the specific service. We are not liable for indirect damages.</p>
+        <h2>Cancellation</h2><p>Cancel before work begins at no charge. After work starts, you pay for time and materials used.</p>
+        <h2>Disputes</h2><p>Resolved through good-faith negotiation under Nebraska law.</p>
+        <h2>Contact</h2><p>Questions? Email <a href="mailto:hello@tuneuptech.com">hello@tuneuptech.com</a>.</p>
+    </div>
+</div>
+
+<!-- COOKIE -->
+<div class="cookie-bar" id="ckb" role="dialog" aria-label="Cookie consent">
+    <p>We use a small cookie to remember your preferences. No tracking. <a href="#" onclick="navigateTo('privacy');return false;">Privacy Policy</a></p>
+    <div class="cookie-btns"><button class="ck-accept" id="cka">Accept</button><button class="ck-decline" id="ckd">Decline</button></div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="foot-left">
+        <span class="foot-brand">Tune Up Tech</span>
+        <ul class="foot-links">
+            <li><button data-page="home">Home</button></li>
+            <li><button data-page="services">Services</button></li>
+            <li><button data-page="about">About</button></li>
+            <li><button data-page="faq">FAQ</button></li>
+            <li><button data-page="contact">Contact</button></li>
+            <li><button data-page="privacy">Privacy</button></li>
+            <li><button data-page="terms">Terms</button></li>
+        </ul>
+    </div>
+    <div class="foot-copy">&copy; 2026 Tune Up Tech</div>
+</footer>
+
+<script>
+    function navigateTo(p) {
+        document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+        const t = document.getElementById('page-' + p);
+        if (t) t.classList.add('active');
+        document.querySelectorAll('.nav-links button[data-page]').forEach(b => {
+            b.classList.remove('active');
+            if (b.dataset.page === p && !b.classList.contains('nav-cta')) b.classList.add('active');
+        });
+        window.scrollTo({ top: 0, behavior: 'instant' });
+        document.getElementById('nl').classList.remove('open');
+        document.getElementById('mt').textContent = '☰';
+        document.getElementById('mt').setAttribute('aria-expanded', 'false');
+        document.querySelectorAll('.page.active .reveal:not(.visible)').forEach(el => obs.observe(el));
+        history.pushState(null, '', p === 'home' ? '/' : '#' + p);
+    }
+    document.querySelectorAll('[data-page]').forEach(el => { el.addEventListener('click', e => { e.preventDefault(); navigateTo(el.dataset.page); }); });
+    window.addEventListener('popstate', () => navigateTo(location.hash.replace('#','') || 'home'));
+    const ip = location.hash.replace('#','') || 'home';
+    if (ip !== 'home') navigateTo(ip);
+
+    document.getElementById('mt').addEventListener('click', () => {
+        const o = document.getElementById('nl').classList.toggle('open');
+        document.getElementById('mt').textContent = o ? '✕' : '☰';
+        document.getElementById('mt').setAttribute('aria-expanded', o.toString());
+    });
+
+    document.querySelectorAll('.faq-q').forEach(b => { b.addEventListener('click', () => {
+        const i = b.closest('.faq-item'), w = i.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(x => { x.classList.remove('open'); x.querySelector('.faq-q').setAttribute('aria-expanded','false'); });
+        if (!w) { i.classList.add('open'); b.setAttribute('aria-expanded','true'); }
+    }); });
+
+    const obs = new IntersectionObserver(e => { e.forEach((x,i) => { if (x.isIntersecting) { setTimeout(() => x.target.classList.add('visible'), i*60); obs.unobserve(x.target); } }); }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    document.getElementById('bb')?.addEventListener('input', function() { document.getElementById('bval').textContent = '$' + parseInt(this.value).toLocaleString(); });
+
+    document.getElementById('buildForm')?.addEventListener('submit', function(e) { e.preventDefault(); const b = this.querySelector('button[type="submit"]'); const o = b.textContent; b.textContent = 'Sent ✓'; b.disabled = true; setTimeout(() => { b.textContent = o; b.disabled = false; this.reset(); document.getElementById('bval').textContent = '$1,000'; }, 3000); });
+    document.getElementById('contactForm')?.addEventListener('submit', function(e) { e.preventDefault(); const b = this.querySelector('button[type="submit"]'); const o = b.textContent; b.textContent = 'Sent ✓'; b.disabled = true; setTimeout(() => { b.textContent = o; b.disabled = false; this.reset(); }, 3000); });
+
+    const ckb = document.getElementById('ckb');
+    if (!localStorage.getItem('tut_ck')) setTimeout(() => ckb.classList.add('visible'), 1500);
+    document.getElementById('cka').addEventListener('click', () => { localStorage.setItem('tut_ck','y'); ckb.classList.remove('visible'); });
+    document.getElementById('ckd').addEventListener('click', () => { localStorage.setItem('tut_ck','n'); ckb.classList.remove('visible'); });
+</script>
+</body>
+</html>
